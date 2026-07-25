@@ -46,7 +46,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       token,
       user: { id: user.id, name: user.name, email: user.email },
     })
-  } catch {
+  } catch (error) {
+    console.error('Register error:', error)
     res.status(500).json({ error: 'Internal server error' })
   }
 }
