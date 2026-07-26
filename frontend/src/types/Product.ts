@@ -6,6 +6,6 @@ export interface Product {
   description: string
   imageUrl: string
   category: string
-  slots: number        // total available slots for sharing
+  slots: number        // total available slots for sharing suscription
   slotsAvailable: number  // remaining slots
 }

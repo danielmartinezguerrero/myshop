@@ -35,7 +35,10 @@ http://localhost:3001
 ## Progress
 - [x] Backend: Express + Prisma + PostgreSQL + JWT auth
 - [x] Frontend: Vite + React + TypeScript base
-- [ ] Tailwind CSS setup
-- [ ] Folder structure
-- [ ] Auth forms (login + register)
-- [ ] Week 1 components
+- [x] Tailwind CSS setup
+- [x] Folder structure
+- [x] Auth forms (login + register)
+- [ ] Header + navigation
+- [ ] Product listing page
+- [ ] Product detail page
+- [ ] Cart

@@ -1,17 +1,52 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import Header from './components/Header'
+import InactivityModal from './components/InactivityModal'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import { useAuth } from './hooks/useAuth'
+import { useInactivityTimer } from './hooks/useInactivityTimer'
 
 const App = () => {
+  const { isAuthenticated, rememberMe, logout } = useAuth()
+  const navigate = useNavigate()
+
+  // Only track inactivity if logged in AND "Remember me" is unchecked
+  const trackInactivity = isAuthenticated && !rememberMe
+
+  const { showWarning, secondsLeft, stayActive } = useInactivityTimer({
+    enabled: trackInactivity,
+    onTimeout: () => {
+      logout()
+      navigate('/login')
+    },
+  })
+
+  // "Sign out now" button
+  const handleSignOutNow = () => {
+    stayActive()
+    logout()
+    navigate('/login')
+  }
+
   return (
-    <Routes>
-      {/* Temporary home page — we'll replace this in Week 1 */}
-      <Route path="/" element={<h1 className="p-8 text-2xl">MyShop</h1>} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      {/* Redirect any unknown URL to home */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<h1 className="p-8 text-2xl">Online Store — Coming soon</h1>} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      {showWarning && trackInactivity && (
+        <InactivityModal
+          secondsLeft={secondsLeft}
+          onStayActive={stayActive}
+          onSignOut={handleSignOutNow}
+        />
+      )}
+    </>
   )
 }
 

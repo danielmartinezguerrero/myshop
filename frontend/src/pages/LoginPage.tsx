@@ -9,6 +9,7 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -19,7 +20,8 @@ const LoginPage = () => {
 
     try {
       const data = await loginUser(email, password)
-      login(data.user, data.token)
+      // Pass rememberMe to the auth context
+      login(data.user, data.token, rememberMe)
       navigate('/')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -69,10 +71,24 @@ const LoginPage = () => {
             />
           </div>
 
+          {/* Remember me checkbox */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-400"
+            />
+            <label htmlFor="rememberMe" className="text-sm text-gray-600">
+              Remember me — don't sign me out due to inactivity
+            </label>
+          </div>
+
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium rounded-lg py-2 text-sm transition-colors"
+            className="w-full bg-gray-900 hover:bg-gray-700 disabled:bg-gray-300 text-white font-medium rounded-lg py-2 text-sm transition-colors"
           >
             {isLoading ? 'Signing in...' : 'Sign in'}
           </button>
@@ -80,7 +96,7 @@ const LoginPage = () => {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline font-medium">
+          <Link to="/register" className="text-gray-900 hover:underline font-medium">
             Create one
           </Link>
         </p>

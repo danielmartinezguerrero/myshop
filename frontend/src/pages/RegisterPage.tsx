@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('')
   const [birthday, setBirthday] = useState('')
 
-  // UI states — to show loading spinner and error messages
+  // UI states
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -29,7 +29,7 @@ const RegisterPage = () => {
       const data = await registerUser(name, email, password, birthday)
 
       // Save the user and token in the global auth context
-      login(data.user, data.token)
+      login(data.user, data.token, false)
 
       // Redirect to the home page after successful registration
       navigate('/')
@@ -47,7 +47,7 @@ const RegisterPage = () => {
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Create an account</h1>
         <p className="text-gray-500 text-sm mb-6">Join MyShop and start sharing subscriptions</p>
 
-        {/* Error message — only shown if there's an error */}
+        {/* Error message, only shown if there's an error */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
             {error}
@@ -63,7 +63,7 @@ const RegisterPage = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="John Doe"
+              placeholder="Daniel Martinez"
               required
               className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -77,7 +77,7 @@ const RegisterPage = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="john@example.com"
+              placeholder="example@example.com"
               required
               className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
