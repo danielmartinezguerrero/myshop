@@ -15,3 +15,47 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  slug          String        @unique   // URL-friendly version, e.g. "streaming"
+  subcategories Subcategory[]           // One category has many subcategories
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Subcategory {
+  id         Int       @id @default(autoincrement())
+  name       String
+  slug       String
+  products   Product[]                    // One subcategory has many products
+
+  // Relation to Category
+  categoryId Int                          // Foreign key column
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  // Slug must be unique within a category, not globally
+  @@unique([categoryId, slug])
+}
+
+model Product {
+  id             Int         @id @default(autoincrement())
+  name           String
+  slug           String      @unique
+  description    String
+  price          Decimal     @db.Decimal(10, 2)   // Never use Float for money
+  imageUrl       String
+  slots          Int                              // Total sharing slots
+  slotsAvailable Int                              // Remaining slots
+  isActive       Boolean     @default(true)       // Soft hide instead of deleting
+
+  // Relation to Subcategory
+  subcategoryId  Int
+  subcategory    Subcategory @relation(fields: [subcategoryId], references: [id])
+
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}

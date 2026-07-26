@@ -1,24 +1,20 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import authRoutes from './routes/auth.routes'
-
-// Load environment variables from .env file
-dotenv.config()
+import productRoutes from './routes/product.routes'
 
 const app = express()
 const PORT = process.env.PORT || 3001
 
-// Middleware
 app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:5174'],
 }))
-app.use(express.json()) // Parse incoming JSON bodies
+app.use(express.json())
 
-// Routes
 app.use('/auth', authRoutes)
+app.use('/products', productRoutes)
 
-// Health check endpoint — useful to verify the server is running
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' })
 })
