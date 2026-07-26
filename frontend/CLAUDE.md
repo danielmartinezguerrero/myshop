@@ -38,7 +38,8 @@ http://localhost:3001
 - [x] Tailwind CSS setup
 - [x] Folder structure
 - [x] Auth forms (login + register)
-- [ ] Header + navigation
+- [x] Header + navigation
+- [x] Inactivity timeout with "Remember me" option
 - [ ] Product listing page
 - [ ] Product detail page
 - [ ] Cart

@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Header from './components/Header'
 import InactivityModal from './components/InactivityModal'
+import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import { useAuth } from './hooks/useAuth'
@@ -33,7 +34,7 @@ const App = () => {
       <Header />
       <main>
         <Routes>
-          <Route path="/" element={<h1 className="p-8 text-2xl">Online Store — Coming soon</h1>} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
