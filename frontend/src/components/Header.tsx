@@ -1,17 +1,26 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
+import { useCart } from '../hooks/useCart'
 
 const Header = () => {
   const { isAuthenticated, user, logout } = useAuth()
+  const { itemCount } = useCart()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
-  // Search input state
-  const [search, setSearch] = useState('')
+  // Search input state — initialised from the URL so it survives reloads
+  const [search, setSearch] = useState(searchParams.get('search') ?? '')
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Search:', search)
+
+    const trimmed = search.trim()
+    if (trimmed) {
+      navigate(`/?search=${encodeURIComponent(trimmed)}`)
+    } else {
+      navigate('/')
+    }
   }
 
   const handleLogout = () => {
@@ -61,10 +70,14 @@ const Header = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.5 6h11" />
             </svg>
-            {/* Cart badge — we'll make this dynamic when we build the cart */}
-            <span className="absolute -top-1 -right-1 bg-gray-900 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-              0
-            </span>
+
+            {/* Badge — only rendered when there's something in the cart.
+                itemCount comes from CartContext and updates automatically. */}
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-gray-900 text-white text-xs rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                {itemCount > 9 ? '9+' : itemCount}
+              </span>
+            )}
           </Link>
 
           {/* Auth buttons — changes based on login state */}

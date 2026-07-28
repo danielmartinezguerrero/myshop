@@ -6,9 +6,11 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import { useAuth } from './hooks/useAuth'
 import { useInactivityTimer } from './hooks/useInactivityTimer'
+import ProductDetailPage from './pages/ProductDetailPage'
+import CartPage from './pages/CartPage'
 
 const App = () => {
-  const { isAuthenticated, rememberMe, logout } = useAuth()
+  const { isAuthenticated, rememberMe, logout, isInitializing } = useAuth()
   const navigate = useNavigate()
 
   // Only track inactivity if logged in AND "Remember me" is unchecked
@@ -29,15 +31,27 @@ const App = () => {
     navigate('/login')
   }
 
+  // While we're validating a stored token, don't render routes yet.
+  // Otherwise protected pages would flash their logged-out state first.
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="h-8 w-8 border-2 border-gray-200 border-t-gray-900 rounded-full animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <>
       <Header />
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/products/:slug" element={<ProductDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/cart" element={<CartPage />} />
         </Routes>
       </main>
       {showWarning && trackInactivity && (

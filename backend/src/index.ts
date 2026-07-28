@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import authRoutes from './routes/auth.routes'
 import productRoutes from './routes/product.routes'
+import cartRoutes from './routes/cart.routes'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -14,6 +15,7 @@ app.use(express.json())
 
 app.use('/auth', authRoutes)
 app.use('/products', productRoutes)
+app.use('/cart', cartRoutes)
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' })

@@ -36,10 +36,11 @@ http://localhost:3001
 - [x] Backend: Express + Prisma + PostgreSQL + JWT auth
 - [x] Frontend: Vite + React + TypeScript base
 - [x] Tailwind CSS setup
-- [x] Folder structure
 - [x] Auth forms (login + register)
 - [x] Header + navigation
 - [x] Inactivity timeout with "Remember me" option
-- [ ] Product listing page
+- [x] Product catalog backend (categories, subcategories, seed)
+- [x] Product listing page (grid, skeletons, empty/error states)
 - [ ] Product detail page
+- [ ] Search + category filters
 - [ ] Cart

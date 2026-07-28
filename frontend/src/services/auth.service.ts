@@ -1,4 +1,5 @@
 import type { AuthResponse } from '../types/User'
+import type { User } from '../types/User'
 
 const API_URL = 'http://localhost:3001'
 
@@ -40,6 +41,21 @@ export const loginUser = async (
 
   if (!response.ok) {
     throw new Error(data.error || 'Login failed')
+  }
+
+  return data
+}
+
+// Validates a stored token and returns the user it belongs to
+export const getMe = async (token: string): Promise<User> => {
+  const response = await fetch(`${API_URL}/auth/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Session expired')
   }
 
   return data

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import prisma from '../lib/prisma'
+import type { AuthRequest } from '../middleware/auth'
 
 // POST /auth/register
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -92,5 +93,27 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     })
   } catch {
     res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+// GET /auth/me — returns the user behind the token.
+// Used on app start to restore a session from a stored token.
+export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId! },
+      // select instead of returning the whole row — never expose the password hash
+      select: { id: true, name: true, email: true, birthday: true },
+    })
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' })
+      return
+    }
+
+    res.json(user)
+  } catch (error) {
+    console.error('Get me error:', error)
+    res.status(500).json({ error: 'Failed to load user' })
   }
 }

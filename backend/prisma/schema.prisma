@@ -12,14 +12,16 @@ model User {
   birthday  String
   name      String
   password  String
+  cart      Cart?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 model Category {
   id            Int           @id @default(autoincrement())
   name          String        @unique
-  slug          String        @unique   // URL-friendly version, e.g. "streaming"
-  subcategories Subcategory[]           // One category has many subcategories
+  slug          String        @unique
+  subcategories Subcategory[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 }
@@ -28,16 +30,12 @@ model Subcategory {
   id         Int       @id @default(autoincrement())
   name       String
   slug       String
-  products   Product[]                    // One subcategory has many products
-
-  // Relation to Category
-  categoryId Int                          // Foreign key column
+  products   Product[]
+  categoryId Int
   category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
-  // Slug must be unique within a category, not globally
   @@unique([categoryId, slug])
 }
 
@@ -46,16 +44,36 @@ model Product {
   name           String
   slug           String      @unique
   description    String
-  price          Decimal     @db.Decimal(10, 2)   // Never use Float for money
+  price          Decimal     @db.Decimal(10, 2)
   imageUrl       String
-  slots          Int                              // Total sharing slots
-  slotsAvailable Int                              // Remaining slots
-  isActive       Boolean     @default(true)       // Soft hide instead of deleting
-
-  // Relation to Subcategory
+  slots          Int
+  slotsAvailable Int
+  isActive       Boolean     @default(true)
   subcategoryId  Int
   subcategory    Subcategory @relation(fields: [subcategoryId], references: [id])
-
+  cartItems      CartItem[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  items     CartItem[]
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  quantity  Int      @default(1)
+  cartId    Int
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, productId])
 }
