@@ -16,6 +16,7 @@ interface CartContextType {
   removeItem: (productId: number) => Promise<void>
   clear: () => Promise<void>
   clearError: () => void
+  refreshCart: () => Promise<void>
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -115,6 +116,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearError = useCallback(() => setError(null), [])
 
+  // Re-fetch the cart from the server. Used after checkout, when the backend
+  // has emptied it and our local copy is stale.
+  const refreshCart = useCallback(async () => {
+    if (!token) return
+
+    try {
+      const data = await cartService.fetchCart(token)
+      setCart(data)
+    } catch {
+      // Non-critical — the user is navigating away anyway
+    }
+  }, [token])
+
   // If the user isn't authenticated, there is no cart to show — regardless of
   // what's left in state. Deriving this avoids clearing state inside an effect.
   const visibleCart = isAuthenticated ? cart : null
@@ -141,6 +155,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         removeItem,
         clear,
         clearError,
+        refreshCart,
       }}
     >
       {children}

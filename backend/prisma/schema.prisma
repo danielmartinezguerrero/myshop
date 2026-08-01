@@ -13,6 +13,7 @@ model User {
   name      String
   password  String
   cart      Cart?
+  orders    Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -52,6 +53,7 @@ model Product {
   subcategoryId  Int
   subcategory    Subcategory @relation(fields: [subcategoryId], references: [id])
   cartItems      CartItem[]
+  orderItems     OrderItem[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -76,4 +78,41 @@ model CartItem {
   updatedAt DateTime @updatedAt
 
   @@unique([cartId, productId])
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  orderNumber String      @unique
+  status      OrderStatus @default(COMPLETED)
+  total       Decimal     @db.Decimal(10, 2)
+  items       OrderItem[]
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  quantity    Int
+  // Price and name are copied here on purpose — an order must keep the values
+  // it had when it was placed, even if the product changes or is deleted later
+  unitPrice   Decimal @db.Decimal(10, 2)
+  productName String
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
 }

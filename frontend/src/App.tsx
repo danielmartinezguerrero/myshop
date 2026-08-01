@@ -8,6 +8,8 @@ import { useAuth } from './hooks/useAuth'
 import { useInactivityTimer } from './hooks/useInactivityTimer'
 import ProductDetailPage from './pages/ProductDetailPage'
 import CartPage from './pages/CartPage'
+import CheckoutPage from './pages/CheckoutPage'
+import OrderDetailPage from './pages/OrderDetailPage'
 
 const App = () => {
   const { isAuthenticated, rememberMe, logout, isInitializing } = useAuth()
@@ -52,6 +54,8 @@ const App = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/orders/:orderNumber" element={<OrderDetailPage />} />
         </Routes>
       </main>
       {showWarning && trackInactivity && (

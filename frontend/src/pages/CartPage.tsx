@@ -200,12 +200,12 @@ const CartPage = () => {
                 </div>
               </div>
 
-              <button
-                disabled={isLoading}
-                className="w-full bg-gray-900 hover:bg-gray-700 disabled:bg-gray-300 text-white font-medium rounded-lg py-3 transition-colors"
+              <Link
+                to="/checkout"
+                className="block text-center w-full bg-gray-900 hover:bg-gray-700 text-white font-medium rounded-lg py-3 transition-colors"
               >
                 Checkout
-              </button>
+              </Link>
 
               <Link
                 to="/"
