@@ -83,6 +83,12 @@ const Header = () => {
           {/* Auth buttons — changes based on login state */}
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
+              <Link
+                to="/orders"
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Orders
+              </Link>
               <span className="text-sm text-gray-600">
                 Hi, {user?.name.split(' ')[0]}
               </span>

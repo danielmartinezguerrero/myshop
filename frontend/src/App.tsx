@@ -11,6 +11,7 @@ import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
 import OrderDetailPage from './pages/OrderDetailPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import OrdersPage from './pages/OrdersPage'
 
 const App = () => {
   const { isAuthenticated, rememberMe, logout, isInitializing } = useAuth()
@@ -69,6 +70,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <OrdersPage />
               </ProtectedRoute>
             }
           />
