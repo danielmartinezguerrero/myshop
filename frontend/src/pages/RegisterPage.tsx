@@ -1,11 +1,16 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { registerUser } from '../services/auth.service'
 import { useAuth } from '../hooks/useAuth'
 
 const RegisterPage = () => {
   // useNavigate lets us redirect the user programmatically
   const navigate = useNavigate()
+  const location = useLocation()
+
+  // Where the user was trying to go before being redirected here.
+  // Falls back to home for a normal registration.
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? '/'
   const { login } = useAuth()
 
   // One state per form field
@@ -28,11 +33,11 @@ const RegisterPage = () => {
       // Call the backend via our service
       const data = await registerUser(name, email, password, birthday)
 
-      // Save the user and token in the global auth context
+      // Save the user and token in the global auth context.
+      // false: registration doesn't offer a "remember me" option
       login(data.user, data.token, false)
 
-      // Redirect to the home page after successful registration
-      navigate('/')
+      navigate(from, { replace: true })
     } catch (err) {
       // Show the error message from the backend (e.g. "Email already registered")
       setError(err instanceof Error ? err.message : 'Something went wrong')
@@ -42,8 +47,8 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl shadow-md w-full max-w-md p-8">
+    <div className="bg-gray-50 flex items-start sm:items-center justify-center px-4 py-8 sm:py-12 min-h-[calc(100vh-7rem)] sm:min-h-[calc(100vh-4rem)]">
+      <div className="bg-white rounded-2xl shadow-md w-full max-w-md p-6 sm:p-8">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Create an account</h1>
         <p className="text-gray-500 text-sm mb-6">Join MyShop and start sharing subscriptions</p>
 
@@ -65,7 +70,7 @@ const RegisterPage = () => {
               onChange={(e) => setName(e.target.value)}
               placeholder="Daniel Martinez"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
           </div>
 
@@ -79,7 +84,7 @@ const RegisterPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="example@example.com"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
           </div>
 
@@ -93,7 +98,7 @@ const RegisterPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Min. 8 characters"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
           </div>
 
@@ -106,14 +111,14 @@ const RegisterPage = () => {
               value={birthday}
               onChange={(e) => setBirthday(e.target.value)}
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium rounded-lg py-2 text-sm transition-colors"
+            className="w-full bg-gray-900 hover:bg-gray-700 disabled:bg-gray-300 text-white font-medium rounded-lg py-2 text-sm transition-colors"
           >
             {isLoading ? 'Creating account...' : 'Create account'}
           </button>
@@ -121,7 +126,7 @@ const RegisterPage = () => {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline font-medium">
+          <Link to="/login" className="text-gray-900 hover:underline font-medium">
             Sign in
           </Link>
         </p>

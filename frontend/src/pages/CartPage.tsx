@@ -33,11 +33,11 @@ const CartPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
+      <div className="flex items-center justify-between mb-8 gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
           Your cart
           {itemCount > 0 && (
-            <span className="text-gray-400 font-normal text-2xl ml-2">({itemCount})</span>
+            <span className="text-gray-400 font-normal text-xl sm:text-2xl ml-2">({itemCount})</span>
           )}
         </h1>
 
@@ -45,7 +45,7 @@ const CartPage = () => {
           <button
             onClick={clear}
             disabled={isLoading}
-            className="text-sm text-gray-500 hover:text-gray-900 disabled:opacity-50 transition-colors"
+            className="text-sm text-gray-500 hover:text-gray-900 disabled:opacity-50 transition-colors whitespace-nowrap"
           >
             Clear cart
           </button>
@@ -63,7 +63,7 @@ const CartPage = () => {
       )}
 
       {isEmpty ? (
-        <div className="border border-gray-200 rounded-xl p-12 text-center">
+        <div className="border border-gray-200 rounded-xl p-8 sm:p-12 text-center">
           <p className="text-gray-900 font-medium mb-1">Your cart is empty</p>
           <p className="text-gray-500 text-sm mb-6">Browse subscriptions and add a slot.</p>
           <Link
@@ -88,7 +88,7 @@ const CartPage = () => {
               return (
                 <div
                   key={item.id}
-                  className={`flex gap-4 border border-gray-200 rounded-xl p-4 transition-opacity ${
+                  className={`flex gap-3 sm:gap-4 border border-gray-200 rounded-xl p-4 transition-opacity ${
                     isPending ? 'opacity-50' : ''
                   }`}
                 >
@@ -96,7 +96,7 @@ const CartPage = () => {
                     <img
                       src={item.product.imageUrl}
                       alt={item.product.name}
-                      className="w-24 h-20 object-cover rounded-lg bg-gray-100"
+                      className="w-16 h-14 sm:w-24 sm:h-20 object-cover rounded-lg bg-gray-100"
                     />
                   </Link>
 
@@ -116,9 +116,10 @@ const CartPage = () => {
                       €{unitPrice.toFixed(2)} /month per slot
                     </span>
 
-                    <div className="flex items-center justify-between mt-3 gap-4">
+                    {/* Stacks on mobile so nothing overflows the card */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-3 gap-3">
                       {/* Quantity stepper */}
-                      <div className="flex items-center border border-gray-200 rounded-lg">
+                      <div className="flex items-center border border-gray-200 rounded-lg self-start">
                         <button
                           onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                           disabled={isPending || item.quantity <= 1}
@@ -138,7 +139,7 @@ const CartPage = () => {
                         </button>
                       </div>
 
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-between sm:justify-end gap-4">
                         <span className="font-medium text-gray-900">
                           €{lineTotal.toFixed(2)}
                         </span>

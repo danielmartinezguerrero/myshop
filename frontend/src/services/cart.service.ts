@@ -1,6 +1,6 @@
 import type { Cart } from '../types/Cart'
 
-const API_URL = 'http://localhost:3001'
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 
 // Every cart endpoint needs the JWT in the Authorization header.
 // This helper keeps that logic in one place.

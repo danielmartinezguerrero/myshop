@@ -12,7 +12,7 @@ const ProductGrid = ({ products, isLoading, error }: ProductGridProps) => {
   // Skeletons reduce layout shift and feel faster to the user.
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Array.from creates an array of 6 items just to render 6 skeletons */}
         {Array.from({ length: 6 }).map((_, index) => (
           <div key={index} className="border border-gray-200 rounded-xl overflow-hidden">

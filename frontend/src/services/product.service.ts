@@ -1,6 +1,6 @@
 import type { Product, CategoryWithSubcategories } from '../types/Product'
 
-const API_URL = 'http://localhost:3001'
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 
 // Optional filters for the product list
 interface ProductFilters {

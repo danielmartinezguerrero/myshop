@@ -36,8 +36,8 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl shadow-md w-full max-w-md p-8">
+    <div className="bg-gray-50 flex items-start sm:items-center justify-center px-4 py-8 sm:py-12 min-h-[calc(100vh-7rem)] sm:min-h-[calc(100vh-4rem)]">
+      <div className="bg-white rounded-2xl shadow-md w-full max-w-md p-6 sm:p-8">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Welcome back</h1>
         <p className="text-gray-500 text-sm mb-6">Sign in to your MyShop account</p>
 
@@ -76,19 +76,21 @@ const LoginPage = () => {
             />
           </div>
 
-          {/* Remember me checkbox */}
-          <div className="flex items-center gap-2">
+          {/* Remember me — the whole label is clickable, not just the box */}
+          <label htmlFor="rememberMe" className="flex items-start gap-2.5 cursor-pointer">
             <input
               type="checkbox"
               id="rememberMe"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-400"
+              // shrink-0 stops the box from being squeezed by the wrapping text,
+              // mt-0.5 aligns it with the first line rather than the block centre
+              className="h-4 w-4 shrink-0 mt-0.5 rounded border-gray-300 text-gray-900 focus:ring-gray-400"
             />
-            <label htmlFor="rememberMe" className="text-sm text-gray-600">
+            <span className="text-sm text-gray-600">
               Remember me — don't sign me out due to inactivity
-            </label>
-          </div>
+            </span>
+          </label>
 
           <button
             type="submit"

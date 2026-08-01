@@ -1,7 +1,7 @@
 import type { AuthResponse } from '../types/User'
 import type { User } from '../types/User'
 
-const API_URL = 'http://localhost:3001'
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 
 // Register a new user
 export const registerUser = async (
