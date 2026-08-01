@@ -1,10 +1,15 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { loginUser } from '../services/auth.service'
 import { useAuth } from '../hooks/useAuth'
 
 const LoginPage = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+
+  // Where the user was trying to go before being redirected here.
+  // Falls back to home for a normal login.
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? '/'
   const { login } = useAuth()
 
   const [email, setEmail] = useState('')
@@ -22,7 +27,7 @@ const LoginPage = () => {
       const data = await loginUser(email, password)
       // Pass rememberMe to the auth context
       login(data.user, data.token, rememberMe)
-      navigate('/')
+      navigate(from, { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
     } finally {

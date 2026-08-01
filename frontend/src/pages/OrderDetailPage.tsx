@@ -6,7 +6,7 @@ import type { Order } from '../types/Order'
 
 const OrderDetailPage = () => {
   const { orderNumber } = useParams<{ orderNumber: string }>()
-  const { token, isAuthenticated } = useAuth()
+  const { token } = useAuth()
 
   const [order, setOrder] = useState<Order | null>(null)
   // Only start in a loading state if we actually have something to fetch.
@@ -39,20 +39,6 @@ const OrderDetailPage = () => {
       ignore = true
     }
   }, [token, orderNumber])
-
-  if (!isAuthenticated) {
-    return (
-      <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <p className="text-gray-600 mb-6">Sign in to view this order.</p>
-        <Link
-          to="/login"
-          className="inline-block bg-gray-900 hover:bg-gray-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
-        >
-          Sign in
-        </Link>
-      </div>
-    )
-  }
 
   if (isLoading) {
     return (

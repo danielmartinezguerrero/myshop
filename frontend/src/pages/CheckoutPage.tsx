@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { placeOrder } from '../services/order.service'
+import { useAuth } from '../hooks/useAuth'
 
 const CheckoutPage = () => {
   const navigate = useNavigate()
-  const { token, user, isAuthenticated } = useAuth()
+  const { token, user } = useAuth()
   const { cart, itemCount, totalPrice, refreshCart } = useCart()
 
   const [isPlacing, setIsPlacing] = useState(false)
@@ -27,21 +27,6 @@ const CheckoutPage = () => {
       setError(err instanceof Error ? err.message : 'Something went wrong')
       setIsPlacing(false)
     }
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Checkout</h1>
-        <p className="text-gray-600 mb-6">Sign in to complete your order.</p>
-        <Link
-          to="/login"
-          className="inline-block bg-gray-900 hover:bg-gray-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
-        >
-          Sign in
-        </Link>
-      </div>
-    )
   }
 
   const isEmpty = !cart || cart.items.length === 0
